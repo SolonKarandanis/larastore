@@ -26,6 +26,6 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
-        ])->assignRole(RolesEnum::Adminitrador->value);
+        ])->assignRole(RolesEnum::Admin->value);
     }
 }

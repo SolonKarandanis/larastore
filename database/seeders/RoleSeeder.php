@@ -17,7 +17,7 @@ class RoleSeeder extends Seeder
     {
         $userRole = Role::create(['name' => RolesEnum::User->value]);
         $vendorRole = Role::create(['name' => RolesEnum::Vendor->value]);
-        $adminRole= Role::create(['name' => RolesEnum::Adminitrador->value]);
+        $adminRole= Role::create(['name' => RolesEnum::Admin->value]);
 
         $approveVendors= Permission::create(['name' => PermissionsEnum::ApproveVendors->value]);
         $sellProducts= Permission::create(['name' => PermissionsEnum::SellProducts->value]);
