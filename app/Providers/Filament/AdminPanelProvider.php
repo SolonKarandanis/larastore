@@ -55,9 +55,6 @@ class AdminPanelProvider extends PanelProvider
                 sprintf('role:%s|%s',
                     RolesEnum::Admin->value,
                     RolesEnum::Vendor->value),
-            ])
-            ->authMiddleware([
-                Authenticate::class,
             ]);
     }
 }
