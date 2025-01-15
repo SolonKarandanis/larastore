@@ -2,8 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Enum\RolesEnum;
-use Filament\Http\Middleware\Authenticate;
+use App\Enums\RolesEnum;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
