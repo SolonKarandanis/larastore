@@ -80,7 +80,31 @@ class ProductVariations extends EditRecord
     private function cartesianProduct($variationTypes, $defaultQuantity,$defaultPrice):array
     {
         $result=[[]];
-
+        foreach ($variationTypes as $index => $variationType) {
+            $temp=[];
+            foreach ($variationType->options as $option) {
+                //Add the current option to all existing combinations
+                foreach ($result as $combination) {
+                    $newCombination = $combination + [
+                            'variation_type_' . ($variationType->id) => [
+                                'id' => $option->id,
+                                'name' => $option->name,
+                                'label' => $variationType->name,
+                            ]
+                    ];
+                    $temp[] = $newCombination;
+                }
+            }
+            //Update results with the new combinations
+            $result=$temp;
+        }
+        // Add quantity and price to completed combinations
+        foreach ($result as $combination) {
+            if(count($combination) == count($variationTypes)){
+                $combination['quantity']= $defaultQuantity;
+                $combination['price']= $defaultPrice;
+            }
+        }
         return $result;
     }
 
