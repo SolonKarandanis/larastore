@@ -92,7 +92,9 @@ class ProductVariations extends EditRecord
             //If match is found, override quantity and price
             if(!empty($match)){
                 $existingEntry = reset($match);
+                $product['id']= $existingEntry['id'];
                 $product['quantity']= $existingEntry['quantity'];
+                $product['price']= $existingEntry['price'];
             }
             else{
                 // Set default quantity and price if no match
@@ -151,6 +153,7 @@ class ProductVariations extends EditRecord
 
             //Prepare the data structure for the database
             $formattedData[]=[
+                'id'=>$option['id'],
                 'variation_type_option_ids'=>$variationTypeOptionIds,
                 'quantity'=>$quantity,
                 'price'=>$price,
@@ -165,9 +168,19 @@ class ProductVariations extends EditRecord
         $variations = $data['variations'];
         unset($data['variations']);
 
+        $variations= collect($variations)
+            ->map(function ($variation){
+                return [
+                    'id'=>$variation['id'],
+                    'variation_type_option_ids'=>json_encode($variation['variation_type_option_ids']),
+                    'quantity'=>$variation['quantity'],
+                    'price'=>$variation['price'],
+                ];
+            })
+            ->toArray();
+
         $record->update($data);
-        $record->variations()->delete();
-        $record->variations()->createMany($variations);
+        $record->variations()->upsert($variations,['id'],['variation_type_option_ids','quantity','price']);
 
         return $record;
     }
