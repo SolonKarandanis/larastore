@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Filament\Resources\ProductResource\Pages\ProductVariations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,6 +12,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
+
 
     public function registerMediaConversions(?Media $media = null): void
     {
@@ -40,6 +40,6 @@ class Product extends Model implements HasMedia
 
     public function variations(): HasMany
     {
-        return $this->hasMany(ProductVariations::class,'product_id');
+        return $this->hasMany(Variation::class,'product_id');
     }
 }
