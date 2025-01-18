@@ -3,6 +3,7 @@ import {Product} from "@/types";
 import {Link} from "@inertiajs/react";
 import CurrencyFormatter from "@/Components/Core/CurrencyFormatter";
 
+
 const ProductItem = ({product}:{product:Product}) => {
   return (
     <div className="card bg-base-100 shadow-xl">

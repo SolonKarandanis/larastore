@@ -7,6 +7,35 @@ export interface User {
     email_verified_at?: string;
 }
 
+export type Image ={
+  id:number;
+  thumb:string;
+  small:string;
+  medium:string;
+  large:string;
+}
+
+export type VariationTypeOption={
+  id:number;
+  name:string;
+  images:Image[];
+  type: VariationType;
+}
+
+export type VariationType ={
+  id:number;
+  name:string;
+  type: 'select' | 'radio' | 'image';
+  options: VariationTypeOption[];
+}
+
+export type Variation={
+  id:number;
+  variation_type_option_ids:number[];
+  quantity:number;
+  price:number;
+}
+
 export type Product={
   id:number;
   title:string;
@@ -14,6 +43,9 @@ export type Product={
   price:number;
   quantity:number;
   image;string;
+  images: Image[];
+  description:string;
+  short_description:string;
   user:{
     id:number;
     name:string;
@@ -22,6 +54,8 @@ export type Product={
     id:number;
     name:string;
   };
+  variationTypes:VariationType[];
+  variation: Variation[];
 }
 
 export type PaginationProps<T>={
