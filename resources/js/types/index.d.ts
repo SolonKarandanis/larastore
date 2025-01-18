@@ -54,7 +54,7 @@ export type Product={
     name:string;
   };
   variationTypes:VariationType[];
-  variation: Variation[];
+  variations: Variation[];
 }
 
 export type PaginationProps<T>={
