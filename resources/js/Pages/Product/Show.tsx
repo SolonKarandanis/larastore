@@ -98,11 +98,11 @@ const Show:FC<Props> = ({product,variationsOptions=[]}) => {
       product.variationTypes.map((type,i)=>(
         <div key={type.id}>
           <b>{type.name}</b>
-          {type.type === 'image' && (
+          {type.type === 'Image' && (
             <div className="flex gap-2 mb-4">
               {type.options.map(option=>(
                 <div onClick={()=> chooseOption(type.id,option)} key={option.id}>
-                  {option.images && (
+                  {option.images && option.images.length >0 && (
                     <img
                       src={option.images[0].thumb}
                       alt=""
@@ -114,18 +114,19 @@ const Show:FC<Props> = ({product,variationsOptions=[]}) => {
               ))}
             </div>
           )}
-          {type.type==='radio' && (
+          {type.type==='Radio' && (
             <div className="flex join mb-4">
-              {type.options.map(option=>(
+              {type.options.map(option=> (
                 <input key={option.id}
                   onChange={()=> chooseOption(type.id,option)}
                   className="join-item btn"
                   type="radio"
                   value={option.id}
-                  checked={selectedOptions[type.id].id===option.id}
+                  checked={selectedOptions[type.id]?.id===option.id}
                   name={`variation_type_${type.id}`}
                   aria-label={option.name}/>
-              ))}
+                )
+              )}
             </div>
           )}
         </div>

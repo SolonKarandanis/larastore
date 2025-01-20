@@ -24,7 +24,7 @@ export type VariationTypeOption={
 export type VariationType ={
   id:number;
   name:string;
-  type: 'select' | 'radio' | 'image';
+  type: 'Select' | 'Radio' | 'Image';
   options: VariationTypeOption[];
 }
 
