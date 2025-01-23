@@ -232,10 +232,11 @@ class CartService
                     'product_id' => $cartItem->product_id,
                     'quantity' => $cartItem->quantity,
                     'price' => $cartItem->price,
-                    'option_ids' => $cartItem->variation_type_option_ids,
+                    'option_ids' => json_decode($cartItem->variation_type_option_ids,true),
                 ];
             })
             ->toArray();
+//        dd($cartItems);
         return $cartItems;
     }
 
