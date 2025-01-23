@@ -23,15 +23,31 @@ class CartService
                 ->mapWithKeys(fn(VariationType $type)=>[$type->id => $type->options[0]?->id])
                 ->toArray();
         }
-        $price = $product->price;
+        $price = $product->getPriceForOptions($optionsIds);
+        if(Auth::check()){
+            $this->saveItemToDatabase($product->id, $quantity, $price,$optionsIds);
+        }
+        else{
+            $this->saveItemToCookies($product->id, $quantity, $price,$optionsIds);
+        }
     }
 
     public function updateItemQuantity(int $productId,int $quantity,$optionsIds = null){
-
+        if(Auth::check()){
+            $this->updateItemQuantityinDatabase($productId, $quantity, $optionsIds);
+        }
+        else{
+            $this->updateItemQuantityInCookies($productId, $quantity, $optionsIds);
+        }
     }
 
     public function removeItemFromCart(int $productId, $optionsIds = null){
-
+        if(Auth::check()){
+            $this->deleteItemFromDatabase($productId, $optionsIds);
+        }
+        else{
+            $this->deleteItemFromCookies($productId, $optionsIds);
+        }
     }
 
     public function getCartItems():array{
