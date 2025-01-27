@@ -69,6 +69,13 @@ export type CartItem={
   options: VariationTypeOption[];
 }
 
+export type GroupedCartItem = {
+  user:User;
+  items:CartItem[];
+  totalPrice:number;
+  totalQuantity:number;
+}
+
 export type PaginationProps<T>={
   data:T[];
 }
@@ -76,6 +83,7 @@ export type PaginationProps<T>={
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
+    csrf_token?:string;
     auth: {
         user: User;
     };

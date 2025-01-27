@@ -37,6 +37,7 @@ class HandleInertiaRequests extends Middleware
         $cartItems = $cartService->getCartItems();
         return [
             ...parent::share($request),
+            'csrf_token' => csrf_token(),
             'auth' => [
                 'user' => $request->user(),
             ],

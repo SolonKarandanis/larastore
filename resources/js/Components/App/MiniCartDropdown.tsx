@@ -37,7 +37,7 @@ const MiniCartDropdown = () => {
                 You dont have any items yet.
               </div>
             )}
-            {cartItems.map((item)=>(
+            {cartItems.length > 0 && cartItems.map((item)=>(
               <div key={item.id} className="flex gap-4 p-3">
                 <Link href={route('product.show',item.slug)}
                       className="w-16 h-16 flex justify-center items-center">
