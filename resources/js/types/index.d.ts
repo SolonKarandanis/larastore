@@ -71,7 +71,7 @@ export type CartItem={
 
 export type GroupedCartItem = {
   user:User;
-  items:CartItem[];
+  cartItems:CartItem[];
   totalPrice:number;
   totalQuantity:number;
 }
@@ -90,5 +90,5 @@ export type PageProps<
     ziggy: Config & { location: string };
     totalQuantity:number;
     totalPrice:number;
-    cartItems:CartItem[];
+    cartItems:Record<number,GroupedCartItem>;
 };
