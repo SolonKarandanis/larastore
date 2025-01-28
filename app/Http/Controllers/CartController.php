@@ -67,4 +67,8 @@ class CartController extends Controller
 
         return back()->with('success','Item removed successfully!');
     }
+
+    public function checkout(){
+
+    }
 }

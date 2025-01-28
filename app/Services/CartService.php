@@ -251,7 +251,7 @@ class CartService
             ->groupBy(fn($item)=>$item['user']['id'])
             ->map(fn($items, $userId)=>[
                 'user'=>$items->first()['user'],
-                'cartItems'=>$items->toArray(),
+                'items'=>$items->toArray(),
                 'totalQuantity'=>$items->sum('quantity'),
                 'totalPrice'=>$items->sum(fn($item)=>$item['price'] * $item['quantity']),
             ])
