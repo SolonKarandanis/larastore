@@ -203,7 +203,7 @@ class CartService
         }
     }
 
-    protected function deleteItemFromDatabase(int $productId,int $optionsIds):void{
+    protected function deleteItemFromDatabase(int $productId,array $optionsIds):void{
         $userId=Auth::id();
         ksort($optionsIds);
         CartItem::where('user_id',$userId)
@@ -212,7 +212,7 @@ class CartService
             ->delete();
     }
 
-    protected function deleteItemFromCookies(int $productId,int $optionsIds):void{
+    protected function deleteItemFromCookies(int $productId,array $optionsIds):void{
         $cartItems= $this->getCartItemsFromCookies();
         ksort($optionsIds);
         $cartKey = $productId.'_'.json_encode($optionsIds);
