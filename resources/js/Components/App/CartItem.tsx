@@ -1,8 +1,9 @@
 import {CartItem as Item} from "@/types";
-import {FC, useState} from "react";
-import {Link, useForm} from "@inertiajs/react";
+import {ChangeEvent, FC, useState} from "react";
+import {Link, router, useForm} from "@inertiajs/react";
 import {productRoute} from "@/helpers";
 import TextInput from "@/Components/Core/TextInput";
+import CurrencyFormatter from "@/Components/Core/CurrencyFormatter";
 
 
 interface Props{
@@ -17,8 +18,17 @@ const CartItem:FC<Props> = ({item}) => {
     deleteForm.delete(route('cart.destroy',item.product_id),{preserveScroll:true});
   };
 
-  const handleQuantityChange= () =>{
-
+  const handleQuantityChange= (ev:ChangeEvent<HTMLInputElement>) =>{
+    setError('');
+    router.put(route('cart.update',item.product_id),{
+      quantity: ev.target.value,
+      option_ids:item.option_ids
+    },{
+      preserveScroll:true,
+      onError:(errors)=>{
+        setError(Object.values(errors)[0]);
+      }
+    });
   };
 
   return (
@@ -60,7 +70,10 @@ const CartItem:FC<Props> = ({item}) => {
                 onClick={()=> onDeleteClick()}>
                 Delete
               </button>
-              <button className="btn btn-sm btn-ghost">SAve for Later</button>
+              <button className="btn btn-sm btn-ghost">Save for Later</button>
+            </div>
+            <div className="font-bold text-lg">
+              <CurrencyFormatter amount={item.price * item.quantity} />
             </div>
           </div>
         </div>
