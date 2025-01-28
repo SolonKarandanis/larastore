@@ -1,10 +1,20 @@
 import React from 'react'
 import {Product} from "@/types";
-import {Link} from "@inertiajs/react";
+import {Link, useForm} from "@inertiajs/react";
 import CurrencyFormatter from "@/Components/Core/CurrencyFormatter";
 
 
 const ProductItem = ({product}:{product:Product}) => {
+  const form = useForm<{
+    option_ids:Record<string,number>;
+    quantity:number;
+  }>({
+    option_ids:{},
+    quantity:1,
+  });
+  const addToCart = () =>{
+    form.post(route('cart.store',product.id),{preserveScroll:true,preserveState:true});
+  }
   return (
     <div className="card bg-base-100 shadow-xl">
       <Link href={route('product.show',product.slug)}>
@@ -19,7 +29,7 @@ const ProductItem = ({product}:{product:Product}) => {
           in <Link href="/" className="hover:underline">{product.department.name}</Link>
         </p>
         <div className="card-actions items-center justify-between mt-3">
-          <button className="btn btn-primary">Add to Cart</button>
+          <button onClick={addToCart} className="btn btn-primary">Add to Cart</button>
           <span className="text-2xl">
             <CurrencyFormatter amount={product.price} />
           </span>
