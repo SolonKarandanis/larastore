@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->decimal('total_price',20,4);
-            $table->foreignId(User::class);
-            $table->foreignId(User::class,'vendor_user_id');
+            $table->foreignIdFor(User::class,);
+            $table->foreignIdFor(User::class,'vendor_user_id');
             $table->string('status');
             $table->string('stripe_session_id')->nullable();
             $table->decimal('online_payment_commission',20,4)->nullable();

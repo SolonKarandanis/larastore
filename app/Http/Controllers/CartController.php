@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Services\CartService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Stripe\Checkout\Session;
@@ -87,23 +88,23 @@ class CartController extends Controller
             }
             $orders = [];
             $lineItems = [];
+
             foreach ($checkoutCartItems as $item){
                 $user = $item['user'];
-                $cartItems = $item['cartItems'];
+                $cartItems = $item['items'];
 
                 $order = Order::create([
                     'stripe_session_id'=> null,
                     'user_id'=> $request->user()->id,
                     'vendor_user_id'=>$user['id'],
-                    'total_price'=>$item['total_price'],
+                    'total_price'=>$item['totalPrice'],
                     'status'=>OrderStatusEnum::Draft->value,
                 ]);
                 $orders[] = $order;
-
                 foreach ($cartItems as $cartItem){
                     OrderItem::create([
                         'order_id'=>$order->id,
-                        'product_id'=>$cartItem['id'],
+                        'product_id'=>$cartItem['product_id'],
                         'quantity'=>$cartItem['quantity'],
                         'price'=>$cartItem['price'],
                         'variation_type_option_ids'=> $cartItem['option_ids']
@@ -120,9 +121,9 @@ class CartController extends Controller
                                 'name'=>$cartItem['title'],
                                 'images'=> [$cartItem['image']],
                             ],
-                            'unit_amount'=>$cartItem['price'] * 100, //stripe was unit amount in cents
-                            'quantity'=>$cartItem['quantity'],
+                            'unit_amount'=>$cartItem['price'] * 100, //stripe wants unit amount in cents
                         ],
+                        'quantity'=>$cartItem['quantity'],
                     ];
                     if($description){
                         $lineItem['price_data']['product_data']['description'] = $description;
@@ -130,6 +131,7 @@ class CartController extends Controller
                     $lineItems[] = $lineItem;
                 }
             }
+
             $session = Session::create([
                 'customer_email'=>$request->user()->email,
                 'line_items'=>$lineItems,

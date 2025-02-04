@@ -16,7 +16,7 @@ const Index = ({
     <AuthenticatedLayout>
       <Head title="Your Cart" />
       <div className="container mx-auto p-8 flex flex-col lg:flex-row gap-4">
-        <div className="card bg-white dark:bg-gray-800 lg:min-w-[260px] order-1 lg:order-2">
+        <div className="card flex-1  bg-white dark:bg-gray-800 lg:min-w-[260px] order-1 ">
           <div className="card-body">
             <h2 className="text-lg font-bold">
               Shopping Cart
@@ -54,7 +54,7 @@ const Index = ({
             </div>
           </div>
         </div>
-        <div className="card flex-1 bg-white dark:bg-gray-800 order-2 lg:order-1">
+        <div className="card bg-white dark:bg-gray-800 order-2 ">
           <div className="card-body">
             Subtotal ({totalQuantity} items): &nbsp;
             <CurrencyFormatter amount={totalPrice} />
