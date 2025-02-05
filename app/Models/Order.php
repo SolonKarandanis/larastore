@@ -19,7 +19,7 @@ class Order extends Model
         'payment_intent'
     ];
 
-    public function orederItems(): HasMany
+    public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
@@ -37,5 +37,10 @@ class Order extends Model
     public function vendor(): BelongsTo
     {
         return $this->belongsTo(Vendor::class,'vendor_user_id','user_id');
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 }

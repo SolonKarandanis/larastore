@@ -24,7 +24,7 @@ class StripeController extends Controller
 
     public function webhook(Request $request){
         $stripe_client = new StripeClient(config('app.stripe_secret_key'));
-        $endpoint_secret= config('app.stripe_endpoint_secret');
+        $endpoint_secret= config('app.stripe_webhook_secret_key');
         $payload= $request->getContent();
         $signature_header = request()->header('Stripe-Signature');
         $event = null;
@@ -46,6 +46,7 @@ class StripeController extends Controller
         Log::info('==========================');
         Log::info($event->type);
         Log::info($event);
+
 
         //Handle the event
         switch ($event->type) {
