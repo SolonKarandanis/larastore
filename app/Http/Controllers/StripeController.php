@@ -3,19 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Enums\OrderStatusEnum;
+use App\Http\Resources\OrderViewResource;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\StripeClient;
 use Stripe\Webhook;
 
 class StripeController extends Controller
 {
-    public function success(){
+    public function success(Request $request){
+        $user= auth()->user();
+        $session_id=$request->get('session_id');
+        $orders = Order::where('stripe_session_id',$session_id)->get();
 
+        if($orders->isEmpty()){
+            abort(404);
+        }
+
+        foreach ($orders as $order){
+            if($order->user_id !== $user->id){
+                abort(403);
+            }
+        }
+
+        return Inertia::render('Stripe/Success',[
+            'orders'=>OrderViewResource::collection($orders)->collection->toArray(),
+        ]);
     }
 
     public function failure(){
