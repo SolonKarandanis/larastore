@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Enums\OrderStatusEnum;
 use App\Http\Resources\OrderViewResource;
+use App\Mail\CheckoutCompleted;
+use App\Mail\NewOrderMail;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\StripeClient;
@@ -60,11 +63,6 @@ class StripeController extends Controller
             Log::error($e);
             return response('Invalid Payload', 400);
         }
-        Log::info('==========================');
-        Log::info('==========================');
-        Log::info($event->type);
-        Log::info($event);
-
 
         //Handle the event
         switch ($event->type) {
@@ -92,7 +90,11 @@ class StripeController extends Controller
                     $order->website_commission = ($order->total_price - $order->online_payment_commission)/100 * $platformFeePercentage;
                     $order->vendor_subtotal=$order->total_price - $order->online_payment_commission-$order->website_commission;
                     $order->save();
+
+                    Mail::to($order->vendorUser)->send(new NewOrderMail($order));
                 }
+
+                Mail::to($orders[0]->user)->send(new CheckoutCompleted($orders));
 
             case 'checkout.session.completed':
                 $session = $event->data->object;
