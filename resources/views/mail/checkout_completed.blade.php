@@ -20,7 +20,7 @@
                     </tr>
                     <tr>
                         <td>Items/td>
-                        <td>{{$order->orderItems}}</td>
+                        <td>{{$order->orderItems->count()}}</td>
                     </tr>
                     <tr>
                         <td>Order Total</td>
@@ -30,8 +30,51 @@
             </table>
         </x-mail::table>
         <x-mail::table>
-
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($order->orderItems as $orderItem)
+                        <tr>
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td padding="5" style="padding: 5px">
+                                                <img style="min-width: 60px; max-width: 60px"
+                                                     src="{{$orderItem->product->getImageForOptions($orderItem->variation_type_option_ids)}}"/>
+                                            </td>
+                                            <td style="font-size: 13px; padding:5px">
+                                                {{$orderItem->product->title}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>
+                                {{$orderItem->quantity}}
+                            </td>
+                            <td>
+                                {{\Illuminate\Support\Number::currency($orderItem->price)}}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </x-mail::table>
+        <x-mail::button :url="$order->id">
+            View Order Details
+        </x-mail::button>
     @endforeach
+    <x-mail::panel>
+        Thank you for having business with us.
+    </x-mail::panel>
+    Thanks, <br>
+    {{config('app.name)}}
 </x-mail::message>
 
