@@ -149,4 +149,17 @@ class StripeController extends Controller
         }
         return response('', 200);
     }
+
+    public function connect()
+    {
+        if(!auth()->user()->getStripeAccountId()){
+            auth()->user()->createStripeAccount(['type'=>'webhook']);
+        }
+
+        if(!auth()->user()->isStripeAccountActive()){
+            return redirect(auth()->user()->getStripeAccountLink());
+        }
+
+        return back()->with('success','Your stripe account is already connected.');
+    }
 }
