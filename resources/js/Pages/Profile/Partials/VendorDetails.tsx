@@ -21,7 +21,7 @@ const VendorDetails = ({className=''}:{className?:string}   ) => {
     processing,
     recentlySuccessful
   } =useForm({
-    store_name: user.vendor?.store_name || user.name,
+    store_name: user.vendor?.store_name || user.name.toLowerCase().replace(/\s+/g,'-'),
     store_address: user.vendor?.store_address,
   });
 

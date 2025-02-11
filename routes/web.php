@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ProductController::class,'home'])->name('dashboard');
@@ -31,6 +32,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/stripe/connect', [StripeController::class, 'connect'])
             ->name('stripe.connect')
         ->middleware(['role:'.\App\Enums\RolesEnum::Vendor->value]);
+
+        Route::post('/become-vendor',[VendorController::class,'store'])->name('vendor.store');
     });
 });
 

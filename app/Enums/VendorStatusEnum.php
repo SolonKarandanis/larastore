@@ -8,6 +8,15 @@ enum VendorStatusEnum:string
     case Approved = 'approved';
     case Rejected = 'rejected';
 
+    public function label(){
+        return match ($this->value){
+            self::Pending->value => __('Pending'),
+            self::Approved->value => __('Approved'),
+            self::Rejected->value => __('Rejected'),
+            default => throw new \Exception('Unexpected match value'),
+        };
+    }
+
     public static function labels():array
     {
         return [
