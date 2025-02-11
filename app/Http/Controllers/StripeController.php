@@ -153,7 +153,7 @@ class StripeController extends Controller
     public function connect()
     {
         if(!auth()->user()->getStripeAccountId()){
-            auth()->user()->createStripeAccount(['type'=>'webhook']);
+            auth()->user()->createStripeAccount(['type'=>'standard']);
         }
 
         if(!auth()->user()->isStripeAccountActive()){
