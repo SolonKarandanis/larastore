@@ -4,6 +4,8 @@ import PrimaryButton from "@/Components/Core/PrimaryButton";
 import InputLabel from "@/Components/Core/InputLabel";
 import TextInput from "@/Components/Core/TextInput";
 import InputError from "@/Components/Core/InputError";
+import Modal from "@/Components/Core/Modal";
+import SecondaryButton from "@/Components/Core/SecondaryButton";
 
 const VendorDetails = ({className=''}:{className?:string}   ) => {
   const [showBecomeVendorConfirmation, setShowBecomeVendorConfirmation] = useState<boolean>(false);
@@ -19,8 +21,8 @@ const VendorDetails = ({className=''}:{className?:string}   ) => {
     processing,
     recentlySuccessful
   } =useForm({
-    store_name: user.vendor.store_name || user.name,
-    store_address: user.vendor.store_address,
+    store_name: user.vendor?.store_name || user.name,
+    store_address: user.vendor?.store_address,
   });
 
   const onStoreNameChange=(ev:ChangeEvent<HTMLInputElement>)=>{
@@ -71,13 +73,13 @@ const VendorDetails = ({className=''}:{className?:string}   ) => {
       <header>
         <h2 className="flex justify-between mb-8 text-lg font-medium text-gray-900 dark:text-gray-100">
           Vendor Details
-          {user.vendor.status ==='pending' && (
+          {user.vendor?.status ==='pending' && (
             <span className="badge badge-warning">{user.vendor.status_label}</span>
           )}
-          {user.vendor.status ==='rejected' && (
+          {user.vendor?.status ==='rejected' && (
             <span className="badge badge-error">{user.vendor.status_label}</span>
           )}
-          {user.vendor.status ==='approved' && (
+          {user.vendor?.status ==='approved' && (
             <span className="badge badge-success">{user.vendor.status_label}</span>
           )}
         </h2>
@@ -120,9 +122,39 @@ const VendorDetails = ({className=''}:{className?:string}   ) => {
                 <PrimaryButton disabled={processing}>Update</PrimaryButton>
               </div>
             </form>
+            <form action={route('stripe.connect')}
+              method="post"
+              className="my-8">
+              <input type="hidden" name="_token" value={token}/>
+              {user.stripe_account_active &&(
+                <div className="text-center text-gray-600 my-4 text-sm">
+                  You are successfully connected to Stripe
+                </div>
+              )}
+              <button
+                className="btn btn-primary w-full"
+                disabled={user.stripe_account_active}>
+                Connect to Stripe
+              </button>
+            </form>
           </>
         )}
       </div>
+      <Modal show={showBecomeVendorConfirmation} onClose={()=>toggleModal(false)}>
+        <form onSubmit={becomeVendor} className="p-8">
+          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Are you sure you want to become a Vendor?
+          </h2>
+          <div className="mt-6 flex justify-end">
+            <SecondaryButton onClick={()=>toggleModal(false)}>
+              Cancel
+            </SecondaryButton>
+            <PrimaryButton className="ms-3" disabled={processing}>
+              Confirm
+            </PrimaryButton>
+          </div>
+        </form>
+      </Modal>
     </section>
   )
 }
