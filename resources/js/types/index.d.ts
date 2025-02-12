@@ -134,3 +134,9 @@ export type Order={
   };
   orderItems:OrderItem[];
 }
+
+export type Vendor={
+  id:number;
+  store_name:string;
+  store_address:string;
+}
