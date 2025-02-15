@@ -9,9 +9,11 @@ use App\Mail\NewOrderMail;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Notifications\PaymentSuccessful;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\StripeClient;
@@ -91,10 +93,15 @@ class StripeController extends Controller
                     $order->vendor_subtotal=$order->total_price - $order->online_payment_commission-$order->website_commission;
                     $order->save();
 
-                    Mail::to($order->vendorUser)->send(new NewOrderMail($order));
+                    $users_to_be_notified=[];
+                    $vendor = $order->vendor;
+                    $users_to_be_notified[]=$vendor;
+                    $users_to_be_notified[]=$order->user;
+                    Notification::send($users_to_be_notified, new PaymentSuccessful($order));
+                    Mail::to($vendor)->send(new NewOrderMail($order));
                 }
-
-                Mail::to($orders[0]->user)->send(new CheckoutCompleted($orders));
+                $buyer = $orders[0]->user;
+                Mail::to($buyer)->send(new CheckoutCompleted($orders));
 
             case 'checkout.session.completed':
                 $session = $event->data->object;
